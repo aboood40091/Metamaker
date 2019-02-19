@@ -25,9 +25,17 @@ from math import ceil
 from PyQt5.QtGui import QImage
 
 import addrlib
-import dds
 import bcn
 from bfres_structs import struct, GX2Surface, empty
+
+try:
+    import pyximport
+    pyximport.install()
+
+    import gx2FormConv_cy as formConv
+
+except ImportError:
+    import gx2FormConv as formConv
 
 
 formats = {
@@ -295,5 +303,5 @@ def texToQImage(tex):
         format_ = 'rgba8'
         bpp = 4
 
-    data = dds.formConv.torgba8(tex.width, tex.height, bytearray(data), format_, bpp, tex.compSel2)
+    data = formConv.torgba8(tex.width, tex.height, bytearray(data), format_, bpp, tex.compSel2)
     return QImage(data, tex.width, tex.height, QImage.Format_RGBA8888)
